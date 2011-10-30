@@ -56,7 +56,7 @@ class Kohana_Gravatar_Xmlrpc {
 		}
 
 		// Configure this library
-		$config += Kohana::config('gravatar.xmlrpc');
+		$config += Kohana::$config->load('gravatar.xmlrpc');
 		$this->_config = $config;
 	}
 
@@ -178,7 +178,7 @@ class Kohana_Gravatar_Xmlrpc {
 	public function save_url($url, $rating = NULL)
 	{
 		// If the URL supplied is not valid
-		if ( ! Validate::url($url))
+		if ( ! Valid::url($url))
 		{
 			// Throw an exception
 			throw new Gravatar_Xmlrpc_Exception(__METHOD__.' invalid URL supplied : :url', array(':url' => $url));
