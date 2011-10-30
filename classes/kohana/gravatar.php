@@ -103,7 +103,8 @@ class Kohana_Gravatar {
 		{
 			if ($config = Kohana::config('gravatar.'.$config) === NULL)
 			{
-				throw new Kohana_Gravatar_Exception('Gravatar.__construct() , Invalid configuration group name : :config', array(':config' => $config));
+				throw new Gravatar_Exception('Gravatar.__construct() , Invalid configuration group name : :config', 
+					array(':config' => $config));
 			}
 
 			$this->_config = $config + Kohana::config('gravatar.default');
@@ -164,7 +165,8 @@ class Kohana_Gravatar {
 			}
 			else
 			{
-				throw new Kohana_Gravatar_Exception('The rating value :rating is not valid. Please use G, PG, R or X. Also available through Class constants', array(':rating' => $rating));
+				throw new Gravatar_Exception('The rating value :rating is not valid. Please use G, PG, R or X. Also available through Class constants', 
+					array(':rating' => $rating));
 			}
 		}
 
@@ -191,7 +193,8 @@ class Kohana_Gravatar {
 			}
 			else
 			{
-				throw new Gravatar('The url : :url is improperly formatted', array(':url' => $url));
+				throw new Gravatar_Exception('The url : :url is improperly formatted', 
+					array(':url' => $url));
 			}
 		}
 
@@ -213,7 +216,7 @@ class Kohana_Gravatar {
 			$this->email = $email;
 		}
 
-		$data = array('attr' => array(), 'src' => $this->_generate_url());
+		$data = array('attr' => array(), 'src' => $this->url());
 
 		if ($this->attributes)
 		{
@@ -263,20 +266,24 @@ class Kohana_Gravatar {
 	 * Creates the Gravatar URL based on the configuration and email
 	 *
 	 * @return  string       the resulting Gravatar URL
-	 * @access  protected
+	 * @access  public
 	 */
-	protected function _generate_url()
+	public function url()
 	{
-		$string = $this->_config['service'].
-			'?gravatar_id='.md5($this->email).
-			'&s='.$this->_config['size'].
-			'&r='.$this->_config['rating'];
-
+		$params = array(
+			'gravatar_id'	=> md5($this->email),
+			's'				=> $this->_config['size'],
+			'r'				=> $this->_config['rating'],
+		);
+		
+		// Add the default avatar if it exists
 		if ( ! empty($this->_config['default']))
 		{
-			$string .= '&d='.$this->_config['default'];
+			$params['d'] = $this->_config['default'];
 		}
 		
-		return $string;
+		$url = $this->_config['service'].'?'.http_build_query($params,'','&');
+		
+		return $url;
 	}
 }

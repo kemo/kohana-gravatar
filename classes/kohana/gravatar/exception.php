@@ -7,4 +7,4 @@
  * @copyright  (c) 2009-2010 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-class Kohana_Gravatar_Exception extends Kohana_Exception { }
+class Kohana_Gravatar_Exception extends Kohana_Exception {}

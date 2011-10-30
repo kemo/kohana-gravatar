@@ -45,14 +45,14 @@ class Kohana_Gravatar_Xmlrpc {
 	 * Constructor
 	 *
 	 * @param   array        $config
-	 * @throws  Kohana_Gravatar_Xmlrpc_Exception
+	 * @throws  Gravatar_Xmlrpc_Exception
 	 */
 	public function __construct($config)
 	{
 		// Check for soap
 		if ( ! extension_loaded('XMLRPC'))
 		{
-			throw new Kohana_Gravatar_Xmlrpc_Exception('XML-RPC extension must be loaded to use this class!');
+			throw new Gravatar_Xmlrpc_Exception('XML-RPC extension must be loaded to use this class!');
 		}
 
 		// Configure this library
@@ -144,14 +144,14 @@ class Kohana_Gravatar_Xmlrpc {
 	 * @param   string       $image
 	 * @param   int          $rating [Optional]
 	 * @return  string|boolean
-	 * @throws  Kohana_Gravatar_Xmlrpc_Exception
+	 * @throws  Gravatar_Xmlrpc_Exception
 	 */
 	public function save_data($image, $rating = NULL)
 	{
 		// Load the image
 		if ( ! $resource = file_get_contents($image))
 		{
-			throw new Kohana_Gravatar_Xmlrpc_Exception(__METHOD__.' unable to open image : :file', array(':file' => $image));
+			throw new Gravatar_Xmlrpc_Exception(__METHOD__.' unable to open image : :file', array(':file' => $image));
 		}
 
 		// If no rating has been applied, use general
@@ -173,7 +173,7 @@ class Kohana_Gravatar_Xmlrpc {
 	 * @param   string       $url 
 	 * @param   int          $rating [Optional]
 	 * @return  string|boolean
-	 * @throws  Kohana_Gravatar_Xmlrpc_Exception
+	 * @throws  Gravatar_Xmlrpc_Exception
 	 */
 	public function save_url($url, $rating = NULL)
 	{
@@ -181,7 +181,7 @@ class Kohana_Gravatar_Xmlrpc {
 		if ( ! Validate::url($url))
 		{
 			// Throw an exception
-			throw new Kohana_Gravatar_Xmlrpc_Exception(__METHOD__.' invalid URL supplied : :url', array(':url' => $url));
+			throw new Gravatar_Xmlrpc_Exception(__METHOD__.' invalid URL supplied : :url', array(':url' => $url));
 		}
 
 		// If no rating has been applied, use general
@@ -240,7 +240,7 @@ class Kohana_Gravatar_Xmlrpc {
 	 * @param   string   method 
 	 * @param   array    parameters 
 	 * @return  mixed
-	 * @throws  Kohana_Gravatar_Xmlrpc_Exception
+	 * @throws  Gravatar_Xmlrpc_Exception
 	 */
 	protected function _xmlrpc_request($method, array $parameters = array())
 	{
@@ -271,7 +271,7 @@ class Kohana_Gravatar_Xmlrpc {
 			if ($xmlrpc_response and xmlrpc_is_fault($xmlrpc_response))
 			{
 				// Throw an exception
-				throw new Kohana_Gravatar_Xmlrpc_Exception($xmlrpc_response['faultString'], NULL, $xmlrpc_response['faultCode']);
+				throw new Gravatar_Xmlrpc_Exception($xmlrpc_response['faultString'], NULL, $xmlrpc_response['faultCode']);
 			}
 			else
 			{
@@ -280,12 +280,12 @@ class Kohana_Gravatar_Xmlrpc {
 			}
 
 			// Shouldn't get this far
-			throw new Kohana_Gravatar_Xmlrpc_Exception(__METHOD__.' something went wrong, xmlrpc_response was empty');
+			throw new Gravatar_Xmlrpc_Exception(__METHOD__.' something went wrong, xmlrpc_response was empty');
 		}
 		// Catch all unexpected exceptions
 		catch (Exception $e)
 		{
-			throw new Kohana_Gravatar_Xmlrpc_Exception($e->getMessage(), NULL, $e->getCode());
+			throw new Gravatar_Xmlrpc_Exception($e->getMessage(), NULL, $e->getCode());
 		}
 	}
 
@@ -294,13 +294,13 @@ class Kohana_Gravatar_Xmlrpc {
 	 * the result
 	 *
 	 * @return  mixed
-	 * @throws  Kohana_Gravatar_Xmlrpc_Exception
+	 * @throws  Gravatar_Xmlrpc_Exception
 	 */
 	protected function _prepare_service_endpoint()
 	{
 		if ($this->_config['email'] === NULL)
 		{
-			throw new Kohana_Gravatar_Xmlrpc_Exception('Username must be supplied to perform Gravatar API requests!');
+			throw new Gravatar_Xmlrpc_Exception('Username must be supplied to perform Gravatar API requests!');
 		}
 
 		// Generate full uri with user id
